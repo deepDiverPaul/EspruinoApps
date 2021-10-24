@@ -229,6 +229,35 @@
     "storage": [
       {"name":".bootcde","url":"app.js"}
     ]
+  },
+  { "id": "pixlball",
+    "name": "Pixl.js Ball",
+    "icon": "icon.png",
+    "version":"0.01",
+    "description": "Pixl.js ball-shaped device",
+    "tags": "",
+    "readme": "README.md",
+    "needsFeatures":["BLE"],
+    "storage": [
+      {"name":".bootcde","url":"boot.js"},
+      {"name":"clock.app.js","url":"clock.app.js"},
+      {"name":"menu.app.js","url":"menu.app.js"}
+    ]
+  },
+  { "id": "mdbt42qbox",
+    "name": "MDBT42Q Box",
+    "icon": "icon.png",
+    "version":"0.01",
+    "description": "MDBT42Q in a Box",
+    "tags": "",
+    "readme": "README.md",
+    "needsFeatures":["BLE"],
+    "storage": [
+      {"name":".bootcde","url":"boot.js"},
+      {"name":"sleep.js","url":"sleep.js"},
+      {"name":"clock.app.js","url":"clock.app.js"},
+      {"name":"menu.app.js","url":"menu.app.js"}
+    ]
   }
 
 
