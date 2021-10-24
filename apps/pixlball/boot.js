@@ -1,0 +1,1 @@
+load('clock.app.js');
