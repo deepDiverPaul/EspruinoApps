@@ -1,0 +1,13 @@
+{
+  "timeoffset": {
+    "value": 2,
+    "min": 0,
+    "max": 100,
+    "step": 10
+  },
+  "showbattery": {
+    "value": true,
+    "type": "boolean",
+    "label": "yes:no"
+  }
+}

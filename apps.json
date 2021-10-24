@@ -254,6 +254,7 @@
     "needsFeatures":["BLE"],
     "storage": [
       {"name":".bootcde","url":"boot.js"},
+      {"name":"settings.json","url":"settings.json"},
       {"name":"sleep.js","url":"sleep.js"},
       {"name":"clock.app.js","url":"clock.app.js"},
       {"name":"menu.app.js","url":"menu.app.js"}
