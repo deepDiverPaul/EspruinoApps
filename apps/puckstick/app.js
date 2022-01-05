@@ -8,11 +8,24 @@ Pin.prototype.glow = function(repeat) {
     if (pos>=repeat) {clearInterval(interval);pin.reset();}
   }, 20); // 50Hz
 };
+function pixlBacklight() {
+  NRF.requestDevice({ filters: [{ namePrefix: 'Pixl.js' }]
+                    }).then(function(device) {
+    require("ble_simple_uart").write(
+          device,
+          "LED.toggle()\n",
+          function() {
+            FET.set();
+            setTimeout(() => {FET.reset();}, 20);
+          });
+  });
+}
 pinMode(D30, 'input_pullup');
 setWatch(function(e) {
   FET.set();
   digitalWrite(D2, 1);
-  setTimeout(() => {FET.reset();digitalWrite(D2, 0);}, 500);
+  setTimeout(() => {FET.reset();digitalWrite(D2, 0);}, 20);
+  pixlBacklight();
 }, D30, { repeat: true, edge: 'rising' });
 
 pinMode(D29, 'input_pullup');
