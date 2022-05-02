@@ -1,3 +1,22 @@
+function sP(r,g,b) {
+  //require("neopixel").write(D3, [g,r,b,g,r,b,g,r,b,g,r,b]);
+}
+
+var rgb = new Uint8ClampedArray(4 * 3);
+var neoOn = false;
+var neoStop = false;
+var pos = 0;
+function getPattern() {
+  if(neoStop === false) pos++;
+  for (var i=0;i<rgb.length;) {
+    rgb[i++] = (1 + Math.sin((pos)*0.1324)) * 10;
+    rgb[i++] = (1 + Math.sin((pos)*0.1654)) * 10;
+    rgb[i++] = (1 + Math.sin((pos)*0.1)) * 10;
+  }
+  return rgb;
+}
+
+
 Graphics.prototype.setFontLato = function(scale) {
   // Actual height 32 (33 - 2)
   g.setFontCustom(atob("AAAAAAAAAAAAAAAAAB4AAAAAPwAAAAA/AAAAAD8AAAAAPwAAAAAeAAAAAAAAAAAAA8AAAAAPwAAAAH/AAAAB/4AAAA//AAAAP/gAAAH/4AAAD/8AAAA/+AAAAf/gAAAH/wAAAB/8AAAAP+AAAAA/AAAAADwAAAAAAAAAAAAAH/8AAAB//8AAAf//8AAD///4AAf///wAD/wH/gAPwAB+AB+AAD8AHwAAHwAfAAAfAB4AAA8AHgAAHwAfAAAfAB+AAD8AD8AAfgAP+AP+AAf///wAA///+AAB///wAAD//+AAAB//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAHgAAAAA+AAPAAH4AA8AA/gADwAD8AAPAAfgAA8AD8AADwAf////AB////8AH////wAf////AB////8AAAAADwAAAAAPAAAAAA8AAAAADwAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAADwAB8AAfAAPwAD8AB/AAfwAP8AD/AA/gAf8AH4AD/wAfAAf/AB8AD/8AHwAf3wAeAD+fAB8Afx8AHwD+HwAfg/wfAA//+B8AD//wHwAH/8AfAAP/gB8AAf4AHwAAEAAPAAAAAAAAAAAAAAAAAAAAAAAAAOAAAOAB8AAD8AH8AAfwAfwAD/AA/gAP4AB+AB+AAD8AHwAAHwAfAeAfAB8B4A8AHgHgHwAfA+AfAB8D4B8AH4fwPwAf//z+AA////4AB/9//AAH/j/4AAH8P/AAAAAPwAAAAAAAAAAAAAAAAAAPgAAAAB+AAAAAf4AAAAD/gAAAAf+AAAAH/4AAAA/ngAAAH8eAAAB/B4AAAP4HgAAB/AeAAAfwB4AAD+AHgAAfwAeAAB////8AH////wAf////AB////8AAAAHgAAAAAeAAAAAB4AAAAAHgAAAAAAAAAAAAAgAAACAPAAAP4A+AA//wD4AH//APwAf/8AfAB//wB8AHweAHwAfB4APAB8HgA8AHweAHwAfB8AfAB8HwD8AHwfgfgAfA//+AB8D//wAHwH/+AAeAP/wABgAf8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf+AAAAH/8AAAA//8AAAH//wAAB///gAAP+A+AAB/wB8AAf/AHwAD/4APAAf3gA8AH+eADwAfx8AfAB+HwB8AHgfgPwAcA/j+ABgD//4AEAH//AAAAf/4AAAAf/AAAAA/wAAAAAAAAAAAAAAAAAAAAAAeAAAAAB8AAAAAHwAAAQAfAAAHAB8AAB8AHwAAfwAfAAH/AB8AB/8AHwAf/gAfAH/4AB8B/+AAHwP/gAAfD/4AAB8/+AAAH//gAAAf/4AAAB/+AAAAH/AAAAAfwAAAAB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAP4AAB/B/4AAP+P/wAB/9//gAP///+AA///H8AHwfwHwAfA/AfAB4B4A8AHgHgDwAeAeAPAB4D4A8AHwPwHwAfh/AfAA///v4AD////gAH/3/8AAP+P/wAAPwf+AAAAAfgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAB/4AAAAf/wAAAB//gAwAP//AHAA/D8A8AHwHwPwAfAPB/AB4A8P8AHgDz/gAeAPf8AB8A//AAHwH/4AAfg/+AAA///wAAD//+AAAH//gAAAP/8AAAAP/AAAAACAAAAAAAAAAAAAAAAAAAB4AeAAAPwD8AAA/APwAAD8A/AAAPwD8AAAeAHgAAAAAAAAAAAAAAAAAAAAA="), 46, atob("CQ8XFxcXFxcXFxcXCw=="), 40+(scale<<8)+(1<<16));
@@ -32,6 +51,14 @@ const pad = n => `0${n}`.slice(-2);
 setWatch(function(e) {
   LED.toggle();
 }, BTN1, { repeat: true, edge: 'rising', debounce: 50 });
+
+//setWatch(function(e) {
+//  neoOn = !neoOn;
+//}, BTN2, { repeat: true, edge: 'rising', debounce: 50 });
+
+//setWatch(function(e) {
+//  neoStop = !neoStop;
+//}, BTN3, { repeat: true, edge: 'rising', debounce: 50 });
 
 setWatch(function(e) {
   load('menu.app.js');
@@ -80,6 +107,14 @@ function onSecond() {
   // }, 2000);
   g.flip();
 }
+
+//setInterval(function() {
+//  if(neoOn){
+//    require("neopixel").write(D3, getPattern());
+//  }else {
+//    sP(0,0,0);
+//  }
+//}, 1000);
 
 // Call onSecond every second
 setInterval(onSecond, 60000);
