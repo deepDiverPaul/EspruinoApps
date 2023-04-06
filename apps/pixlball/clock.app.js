@@ -35,14 +35,6 @@ setWatch(function(e) {
   LED.toggle();
 }, BTN1, { repeat: true, edge: 'rising', debounce: 50 });
 
-//setWatch(function(e) {
-//  neoOn = !neoOn;
-//}, BTN2, { repeat: true, edge: 'rising', debounce: 50 });
-
-//setWatch(function(e) {
-//  neoStop = !neoStop;
-//}, BTN3, { repeat: true, edge: 'rising', debounce: 50 });
-
 setWatch(function(e) {
   load('menu.app.js');
 }, BTN4, { repeat: true, edge: 'rising', debounce: 50 });
@@ -87,7 +79,7 @@ function onSecond() {
   //var seconds = ("0"+t.getSeconds()).substr(-2);
   g.drawString(separator,64 - (g.stringWidth(separator)/2),14);
   g.drawString(t.getHours(),(64 - g.stringWidth(t.getHours()) - 6),14);
-  g.drawString(t.getMinutes(),(64 + 4),14);
+  g.drawString(("0"+t.getMinutes()).substr(-2),(64 + 4),14);
 
   g.setFontLatoSmall();
 
@@ -110,6 +102,8 @@ function onSecond() {
 
   g.flip();
 }
+
+LED1.set();
 
 // Call onSecond every second
 setInterval(updatePuckData, 60000);
