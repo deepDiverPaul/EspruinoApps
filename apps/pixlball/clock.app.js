@@ -1,21 +1,4 @@
-function sP(r,g,b) {
-  //require("neopixel").write(D3, [g,r,b,g,r,b,g,r,b,g,r,b]);
-}
-
-var rgb = new Uint8ClampedArray(4 * 3);
-var neoOn = false;
-var neoStop = false;
-var pos = 0;
-function getPattern() {
-  if(neoStop === false) pos++;
-  for (var i=0;i<rgb.length;) {
-    rgb[i++] = (1 + Math.sin((pos)*0.1324)) * 10;
-    rgb[i++] = (1 + Math.sin((pos)*0.1654)) * 10;
-    rgb[i++] = (1 + Math.sin((pos)*0.1)) * 10;
-  }
-  return rgb;
-}
-
+var second = true;
 
 Graphics.prototype.setFontLato = function(scale) {
   // Actual height 32 (33 - 2)
@@ -64,6 +47,31 @@ setWatch(function(e) {
   load('menu.app.js');
 }, BTN4, { repeat: true, edge: 'rising', debounce: 50 });
 
+var puckTemp = 'no';
+var puckBatt = 'Puck';
+
+function updatePuckData() {
+  NRF.findDevices(function(devs) {
+    if (devs.length == 0) {
+      puckTemp = 'no';
+      puckBatt = 'Puck';
+    }
+    devs.forEach(function(dev) {
+      if (dev.manufacturer!=0x590) return;
+      var d = new DataView(dev.manufacturerData);
+      puckTemp = `${d.getInt8(1)}'C`;
+      puckBatt = `${d.getUint8(0)}%`;
+      // g.drawString(`${dev.name}: ${d.getInt8(1)}'C (${d.getUint8(0)}% bat)`,0,(idx*6)+45);
+    });
+  }, 2000);
+}
+
+var climate = bme.getData();
+
+function updateBmeData() {
+  climate = bme.getData();
+}
+
 
 function onSecond() {
   // Called every second
@@ -73,49 +81,42 @@ function onSecond() {
   // Draw the time
   //g.setFontVector(30);
   g.setFontLato();
-  var time = t.getHours()+":"+("0"+t.getMinutes()).substr(-2);
-  var seconds = ("0"+t.getSeconds()).substr(-2);
-  g.drawString(time,64 - (g.stringWidth(time)/2),14);
-  //g.setFontVector(20);
-  //g.drawString(seconds,95,20);
+  var separator = second ? ':' : ' ';
+  second = !second;
+  //var time = t.getHours()+separator+("0"+t.getMinutes()).substr(-2);
+  //var seconds = ("0"+t.getSeconds()).substr(-2);
+  g.drawString(separator,64 - (g.stringWidth(separator)/2),14);
+  g.drawString(t.getHours(),(64 - g.stringWidth(t.getHours()) - 6),14);
+  g.drawString(t.getMinutes(),(64 + 4),14);
 
   g.setFontLatoSmall();
 
-  climate = bme.getData();
-  var temperature = climate.temp.toFixed(1) +' C';
+  var temperature = climate.temp.toFixed(1) +"'C";
   g.drawString(temperature,0,64-13);
 
   var humidity = climate.humidity.toFixed(0) +' rF';
   g.drawString(humidity,128 - g.stringWidth(humidity),64-13);
 
+
+  g.drawString(puckTemp,0,0);
+  g.drawString(puckBatt,128 - g.stringWidth(puckBatt),0);
+
   // Draw the date
   // Get the date as a string by removing the time from the end of it
-  var date = `${pad(t.getDate())}.${pad(t.getMonth()+1)}.${t.getFullYear()}`;
+  // var date = `${pad(t.getDate())}.${pad(t.getMonth()+1)}.${t.getFullYear()}`;
+  //var date = `${pad(t.getDate())}.${pad(t.getMonth()+1)}`;
   //g.setFontBitmap();
-  g.drawString(date,64 - (g.stringWidth(date)/2),0);
+  //g.drawString(date,64 - (g.stringWidth(date)/2),0);
 
-  // NRF.findDevices(function(devs) {
-  //   var idx = 0;
-  //   devs.forEach(function(dev) {
-  //     if (dev.manufacturer!=0x590) return;
-  //     var d = new DataView(dev.manufacturerData);
-  //     g.drawString(`${dev.name}: ${d.getInt8(1)}'C (${d.getUint8(0)}% bat)`,0,(idx*6)+45);
-  //     idx++;
-  //   });
-  //   if (!idx) g.drawString("(no devices found)", 0, 45);
-  //   g.flip();
-  // }, 2000);
   g.flip();
 }
 
-//setInterval(function() {
-//  if(neoOn){
-//    require("neopixel").write(D3, getPattern());
-//  }else {
-//    sP(0,0,0);
-//  }
-//}, 1000);
-
 // Call onSecond every second
-setInterval(onSecond, 60000);
+setInterval(updatePuckData, 60000);
+updatePuckData();
+
+setInterval(updateBmeData, 10000);
+updateBmeData();
+
+setInterval(onSecond, 1000);
 onSecond();
